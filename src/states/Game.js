@@ -6,41 +6,28 @@ export default class extends Phaser.State {
   init () {}
   preload () {
       this.game.load.spritesheet('player', './assets/images/player.png', 32, 32)
-      this.game.load.spritesheet('startdoor', './assets/images/tiles.png', 32, 32, 100, 255)
-      this.game.load.spritesheet('enddoor', './assets/images/tiles.png', 32, 32, 100, 255)
-      this.game.load.spritesheet('woodchest', './assets/images/tiles.png', 32, 32, 100, 32, 32, 10)
-      this.game.load.spritesheet('goldchest', './assets/images/tiles.png', 32, 32, 100, 32, 32, 10)
-      this.game.load.spritesheet('diamondchest', './assets/images/tiles.png', 32, 32, 100, 32, 32, 10)
   }
 
   create () {
     this.score = 0;
-    this.scoreText;
     this.map = this.game.add.tilemap('tilemap');
     this.map.addTilesetImage('tiles', 'tiles');
 
-    this.groundLayer = this.map.createLayer('blockedLayer');
-    this.backgroundLayer = this.map.createLayer('backgroundLayer');
-    // this.objectsLayer = this.map.createLayer('objectsLayer');
-    this.scoreText = this.game.add.text(30, 0, 'Score: '+ this.score, { fontSize: '32px', fill: '#000' });
+    this.backgroundLayer = this.map.createLayer('Background');
+    this.groundLayer = this.map.createLayer('Trees');
 
-      //
     // //Before you can use the collide function you need to set what tiles can collide
-    this.map.setCollisionBetween(1, 1000, true, 'backgroundLayer');
+    this.map.setCollisionBetween(1, 1000, true, 'Trees');
 
     //Change the world size to match the size of this layer
     this.backgroundLayer.resizeWorld();
 
 
-    this.player = this.game.add.sprite(50, 800, 'player')
+    this.player = this.game.add.sprite(125, 75, 'player')
 
     this.game.physics.arcade.enable(this.player)
     this.game.physics.arcade.enable(this.backgroundLayer)
     this.player.body.gravity.y = 0
-
-    this.player.body.setSize(30, 20)
-
-      //Afegir offset a la Y negativa
 
     this.cursor = game.input.keyboard.createCursorKeys()
 
@@ -50,8 +37,8 @@ export default class extends Phaser.State {
     this.player.animations.add('right', [8, 9, 10, 11, 8], 10, false)
     this.player.animations.add('up', [12, 13, 14, 15, 12], 10, false)
 
-      this.createItems();
-      this.createDoors();
+      // this.createItems();
+      // this.createDoors();
 
   }
     createItems() {
@@ -112,9 +99,9 @@ export default class extends Phaser.State {
         console.log('entering door that will take you to '+door.targetTilemap+' on x:'+door.targetX+' and y:'+door.targetY);
     }
   update(){
-      this.game.physics.arcade.collide(this.player, this.backgroundLayer)
-      this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
-      this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
+      this.game.physics.arcade.collide(this.player, this.groundLayer)
+      // this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
+      // this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
 
 
       this.inputs()

@@ -21,9 +21,7 @@ export default class extends Phaser.State {
 
     this.load.image('loaderBg', './assets/images/loader-bg.png')
     this.load.image('loaderBar', './assets/images/loader-bar.png')
-
-    // this.load.spritesheet('player', './assets/images/player.png', 38, 48);
-    this.load.tilemap('tilemap', './assets/tilemaps/level1.json', null, Phaser.Tilemap.TILED_JSON);
+    this.load.tilemap('tilemap', './assets/tilemaps/levelOne.json', null, Phaser.Tilemap.TILED_JSON);
     this.load.image('tiles', './assets/images/tiles.png');
 
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
