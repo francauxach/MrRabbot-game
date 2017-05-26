@@ -6,6 +6,7 @@ export default class extends Phaser.State {
   init () {}
   preload () {
       this.game.load.spritesheet('player', './assets/images/player.png', 32, 32)
+      this.game.load.spritesheet('campFire', './assets/images/campFire.png', 64, 64)
       this.game.load.image('carrot', './assets/images/carrot.png')
   }
 
@@ -42,7 +43,7 @@ export default class extends Phaser.State {
     this.player.animations.add('up', [12, 13, 14, 15, 12], 10, false)
 
       this.createItems();
-      // this.createDoors();
+      this.createCampFires();
 
   }
     createItems() {
@@ -67,18 +68,38 @@ export default class extends Phaser.State {
         this.carrots.add(this.carrot8)
     }
 
+    createCampFires() {
+      this.campFires = this.game.add.group();
+      this.campFires.enableBody = true;
+      this.campFire1 = this.game.add.sprite(495, 100, 'campFire')
+      this.campFires.add(this.campFire1)
+      this.campFire1.animations.add('fire', [0,1,2,3], 8, false)
+      this.campFire2 = this.game.add.sprite(495, 735, 'campFire')
+      this.campFires.add(this.campFire2)
+      this.campFire2.animations.add('fire', [0,1,2,3], 8, false)
+      this.campFire3 = this.game.add.sprite(835, 835, 'campFire')
+      this.campFires.add(this.campFire3)
+      this.campFire3.animations.add('fire', [0,1,2,3], 8, false)
+      this.campFire4 = this.game.add.sprite(680, 60, 'campFire')
+      this.campFires.add(this.campFire4)
+      this.campFire4.animations.add('fire', [0,1,2,3], 8, false)
+    }
+
     collect(player, collectable) {
       //TODO: Level up score
         collectable.destroy();
     }
 
-    enterDoor(player, door) {
-        console.log('entering door that will take you to '+door.targetTilemap+' on x:'+door.targetX+' and y:'+door.targetY);
+    shake(player, enemy) {
+        this.game.camera.shake(0.05, 200)
     }
+
   update(){
       this.game.physics.arcade.collide(this.player, this.groundLayer)
       this.game.physics.arcade.overlap(this.player, this.carrots, this.collect, null, this);
+      this.game.physics.arcade.overlap(this.player, this.campFires, this.shake, null, this);
 
+      this.fireCampsAnimation()
 
       this.inputs()
       // if (this.player.body) {
@@ -92,6 +113,13 @@ export default class extends Phaser.State {
       //         this.hasJumped = false
       //     }
       // }
+  }
+
+  fireCampsAnimation () {
+      this.campFire1.animations.play('fire');
+      this.campFire2.animations.play('fire');
+      this.campFire3.animations.play('fire');
+      this.campFire4.animations.play('fire');
   }
 
     inputs () {
