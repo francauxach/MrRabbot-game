@@ -6,6 +6,7 @@ export default class extends Phaser.State {
   init () {}
   preload () {
       this.game.load.spritesheet('player', './assets/images/player.png', 32, 32)
+      this.game.load.image('carrot', './assets/images/carrot.png')
   }
 
   create () {
@@ -20,13 +21,16 @@ export default class extends Phaser.State {
     this.map.setCollisionBetween(1, 1000, true, 'Trees');
 
     //Change the world size to match the size of this layer
-    this.backgroundLayer.resizeWorld();
+    // this.backgroundLayer.resizeWorld();
 
 
     this.player = this.game.add.sprite(125, 75, 'player')
 
     this.game.physics.arcade.enable(this.player)
     this.game.physics.arcade.enable(this.backgroundLayer)
+    this.game.camera.setSize(800,500)
+    this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON)
+
     this.player.body.gravity.y = 0
 
     this.cursor = game.input.keyboard.createCursorKeys()
@@ -37,61 +41,34 @@ export default class extends Phaser.State {
     this.player.animations.add('right', [8, 9, 10, 11, 8], 10, false)
     this.player.animations.add('up', [12, 13, 14, 15, 12], 10, false)
 
-      // this.createItems();
+      this.createItems();
       // this.createDoors();
 
   }
     createItems() {
         //create items
-        this.items = this.game.add.group();
-        this.items.enableBody = true;
-        var item;
-        var result = this.findObjectsByType('item', this.map, 'objectsLayer');
-        result.forEach(function(element){
-            this.createFromTiledObject(element, this.items);
-        }, this);
-    }
-    findObjectsByType(type, map, layer) {
-        var result = []
-        map.objects[layer].forEach(function(element){
-            if(element.properties.type === type) {
-                //Phaser uses top left, Tiled bottom left so we have to adjust the y position
-                //also keep in mind that the cup images are a bit smaller than the tile which is 16x16
-                //so they might not be placed in the exact pixel position as in Tiled
-                element.y -= map.tileHeight;
-                result.push(element);
-            }
-        });
-        return result;
-    }
-
-    //create a sprite from an object
-    createFromTiledObject(element, group) {
-        var sprite = group.create(element.x, element.y, element.properties.sprite);
-
-        //copy all properties to the sprite
-        Object.keys(element.properties).forEach(function(key){
-            sprite[key] = element.properties[key];
-        });
-    }
-
-    createDoors() {
-        //create doors
-        this.doors = this.game.add.group();
-        this.doors.enableBody = true;
-        var result = this.findObjectsByType('door', this.map, 'objectsLayer');
-
-        result.forEach(function(element){
-            this.createFromTiledObject(element, this.doors);
-        }, this);
+        this.carrots = this.game.add.group();
+        this.carrots.enableBody = true;
+        this.carrot1 = this.game.add.sprite(125, 630, 'carrot')
+        this.carrots.add(this.carrot1)
+        this.carrot2 = this.game.add.sprite(325, 430, 'carrot')
+        this.carrots.add(this.carrot2)
+        this.carrot3 = this.game.add.sprite(510, 530, 'carrot')
+        this.carrots.add(this.carrot3)
+        this.carrot4 = this.game.add.sprite(510, 225, 'carrot')
+        this.carrots.add(this.carrot4)
+        this.carrot5 = this.game.add.sprite(880, 325, 'carrot')
+        this.carrots.add(this.carrot5)
+        this.carrot6 = this.game.add.sprite(710, 850, 'carrot')
+        this.carrots.add(this.carrot6)
+        this.carrot7 = this.game.add.sprite(880, 525, 'carrot')
+        this.carrots.add(this.carrot7)
+        this.carrot8 = this.game.add.sprite(325, 850, 'carrot')
+        this.carrots.add(this.carrot8)
     }
 
     collect(player, collectable) {
-        this.score += 10;
-        this.scoreText.text = 'Score: ' + this.score;
-        console.log('coleccionada');
-
-        //remove sprite
+      //TODO: Level up score
         collectable.destroy();
     }
 
@@ -100,8 +77,7 @@ export default class extends Phaser.State {
     }
   update(){
       this.game.physics.arcade.collide(this.player, this.groundLayer)
-      // this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
-      // this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
+      this.game.physics.arcade.overlap(this.player, this.carrots, this.collect, null, this);
 
 
       this.inputs()
