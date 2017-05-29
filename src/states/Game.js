@@ -18,7 +18,7 @@ export default class extends Phaser.State {
     this.backgroundLayer = this.map.createLayer('Background');
     this.groundLayer = this.map.createLayer('Trees');
 
-    // //Before you can use the collide function you need to set what tiles can collide
+      // //Before you can use the collide function you need to set what tiles can collide
     this.map.setCollisionBetween(1, 1000, true, 'Trees');
 
     //Change the world size to match the size of this layer
@@ -33,6 +33,8 @@ export default class extends Phaser.State {
     this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON)
 
     this.player.body.gravity.y = 0
+    this.player.body.allowRotation = false;
+    this.player.body.setSize(32, 16, 0, 16)
 
     this.cursor = game.input.keyboard.createCursorKeys()
 
@@ -83,6 +85,9 @@ export default class extends Phaser.State {
       this.campFire4 = this.game.add.sprite(680, 60, 'campFire')
       this.campFires.add(this.campFire4)
       this.campFire4.animations.add('fire', [0,1,2,3], 8, false)
+      this.campFires.forEach( (campFire) => {
+        campFire.body.setSize(32,48, 24, 12)
+      })
     }
 
     collect(player, collectable) {
