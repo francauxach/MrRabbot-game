@@ -48,8 +48,21 @@ export default class extends Phaser.State {
 
     this.createItems();
     this.createCampFires();
+    this.createHUD();
 
   }
+
+    createHUD() {
+      this.livesSheets = this.game.add.group();
+      this.hud = this.game.add.group();
+      this.hud.enableBody = false;
+      this.livesText = this.add.text(550, 50, 'Rabbits:    x' + this.lives, { font: '40px Arial', fill: '#dddddd', align: 'center' })
+      this.livesSheets.create(700, 60, 'player');
+      this.hud.add(this.livesText)
+      this.hud.add(this.livesSheets)
+      this.hud.fixedToCamera = true;
+    }
+
     createItems() {
         //create items
         this.carrots = this.game.add.group();
@@ -105,6 +118,7 @@ export default class extends Phaser.State {
         this.game.camera.shake(0.05, 200)
         this.playerFired = true;
         this.lives--;
+        this.livesText.setText('Rabbits:    x' + this.lives)
         if (this.lives == 0) {
             this.game.state.start("GameOver");
         }
