@@ -12,6 +12,9 @@ export default class extends Phaser.State {
 
   create () {
     this.score = 0;
+    this.lives = 3;
+    this.playerFired = false;
+    this.timer = 0;
     this.map = this.game.add.tilemap('tilemap');
     this.map.addTilesetImage('tiles', 'tiles');
 
@@ -24,8 +27,7 @@ export default class extends Phaser.State {
     //Change the world size to match the size of this layer
     // this.backgroundLayer.resizeWorld();
 
-
-    this.player = this.game.add.sprite(125, 75, 'player')
+    this.spawnPlayer();
 
     this.game.physics.arcade.enable(this.player)
     this.game.physics.arcade.enable(this.backgroundLayer)
@@ -36,7 +38,7 @@ export default class extends Phaser.State {
     this.player.body.allowRotation = false;
     this.player.body.setSize(32, 16, 0, 16)
 
-    this.cursor = game.input.keyboard.createCursorKeys()
+    this.cursor = this.game.input.keyboard.createCursorKeys()
 
     this.player.frame = 1
     this.player.animations.add('down', [0, 1, 2, 3, 0], 10, false)
@@ -44,8 +46,8 @@ export default class extends Phaser.State {
     this.player.animations.add('right', [8, 9, 10, 11, 8], 10, false)
     this.player.animations.add('up', [12, 13, 14, 15, 12], 10, false)
 
-      this.createItems();
-      this.createCampFires();
+    this.createItems();
+    this.createCampFires();
 
   }
     createItems() {
@@ -86,38 +88,43 @@ export default class extends Phaser.State {
       this.campFires.add(this.campFire4)
       this.campFire4.animations.add('fire', [0,1,2,3], 8, false)
       this.campFires.forEach( (campFire) => {
-      campFire.body.setSize(32,48, 24, 12)
+        campFire.body.setSize(32,48, 24, 12)
       })
     }
 
+    spawnPlayer() {
+        this.player = this.game.add.sprite(125, 75, 'player')
+    }
+
     collect(player, collectable) {
-      //TODO: Level up score
+        //TODO: Level up score
         collectable.destroy();
     }
 
-    shake(player, enemy) {
+    firing(player, enemy) {
         this.game.camera.shake(0.05, 200)
+        this.playerFired = true;
+        this.lives--;
+        if (this.lives == 0) {
+            this.game.state.start("GameOver");
+        }
     }
 
   update(){
       this.game.physics.arcade.collide(this.player, this.groundLayer)
       this.game.physics.arcade.overlap(this.player, this.carrots, this.collect, null, this);
-      this.game.physics.arcade.overlap(this.player, this.campFires, this.shake, null, this);
+      if(!this.playerFired) {
+          this.game.physics.arcade.overlap(this.player, this.campFires, this.firing, null, this);
+      } else {
+          this.timer++
+          if (this.timer%50 == 0) {
+              this.playerFired = false;
+          }
+      }
 
       this.fireCampsAnimation()
 
       this.inputs()
-      // if (this.player.body) {
-      //     if (this.player.body.touching.down) {
-      //         if (this.hasJumped) {
-      //             this.dustSound.play();
-      //             this.dust.x = this.player.x;
-      //             this.dust.y = this.player.y + 10;
-      //             this.dust.start(true, 300, null, 8);
-      //         }
-      //         this.hasJumped = false
-      //     }
-      // }
   }
 
   fireCampsAnimation () {

@@ -14,7 +14,6 @@ export default class extends Phaser.State {
   }
 
   preload () {
-      this.loadImages();
       this.loadBgm();
       this.game.add.sprite(0, 0, 'stars');
       this.game.add.existing(this.logo).scale.setTo(0.5);
@@ -33,7 +32,6 @@ export default class extends Phaser.State {
   }
 
   create () {
-    // this.state.start('Game')
       this.status.setText('Ready!');
       this.addGameStates();
       this.addGameMusic();
@@ -46,10 +44,6 @@ export default class extends Phaser.State {
   loadBgm() {
       this.game.load.audio('dangerous', './assets/bgm/Dangerous.mp3');
       this.game.load.audio('exit', './assets/bgm/Exit the Premises.mp3');
-  }
-
-  loadImages() {
-
   }
 
   addGameStates() {
