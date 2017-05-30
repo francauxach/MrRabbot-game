@@ -86,7 +86,7 @@ export default class extends Phaser.State {
       this.campFires.add(this.campFire4)
       this.campFire4.animations.add('fire', [0,1,2,3], 8, false)
       this.campFires.forEach( (campFire) => {
-        campFire.body.setSize(32,48, 24, 12)
+      campFire.body.setSize(32,48, 24, 12)
       })
     }
 

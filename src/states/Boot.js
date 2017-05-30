@@ -23,6 +23,12 @@ export default class extends Phaser.State {
     this.load.image('loaderBar', './assets/images/loader-bar.png')
     this.load.tilemap('tilemap', './assets/tilemaps/levelOne.json', null, Phaser.Tilemap.TILED_JSON);
     this.load.image('tiles', './assets/images/tiles.png');
+    this.load.image('menu-bg', './assets/images/menu-bg.jpg');
+    this.load.image('options-bg', './assets/images/options-bg.jpg');
+    this.load.image('gameover-bg', './assets/images/gameover-bg.jpg');
+    this.load.image('brand', './assets/images/logo.png');
+    this.load.image('stars', './assets/images/stars.jpg');
+    this.load.image('loading', './assets/images/loading.png');
 
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -31,8 +37,8 @@ export default class extends Phaser.State {
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     //have the game centered horizontally
-    this.scale.pageAlignHorizontally = true;
-    this.scale.pageAlignVertically = true;
+    this.game.stage.scale.pageAlignHorizontally = true;
+    this.game.stage.scale.pageAlignVertically = true;
   }
 
   render () {

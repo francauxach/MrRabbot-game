@@ -1,5 +1,12 @@
 export default {
-  gameWidth: 760,
-  gameHeight: 400,
-  localStorageName: 'phaseres6webpack'
+  gameWidth: 950,
+  gameHeight: 800,
+  localStorageName: 'phaseres6webpack',
+  gameOptions: {
+    playSound: true,
+    playMusic: true
+  },
+  musicPlayer: {
+    volume: 1,
+  }
 }
