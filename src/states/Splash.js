@@ -1,9 +1,6 @@
 import Phaser from 'phaser'
 import { centerGameObjects } from '../utils'
-import Game from "./Game";
 import GameMenu from "./GameMenu";
-import GameOver from "./GameOver";
-import Options from "./Options";
 
 export default class extends Phaser.State {
   init () {
@@ -33,24 +30,18 @@ export default class extends Phaser.State {
 
   create () {
       this.status.setText('Ready!');
-      this.addGameStates();
       this.addGameMusic();
 
+      let splash = this;
+
       setTimeout(function () {
-          this.game.state.start("GameMenu");
+          splash.state.start('GameMenu')
       }, 1000);
   }
 
   loadBgm() {
       this.game.load.audio('dangerous', './assets/bgm/Dangerous.mp3');
       this.game.load.audio('exit', './assets/bgm/Exit the Premises.mp3');
-  }
-
-  addGameStates() {
-      this.game.state.add("GameMenu", GameMenu);
-      this.game.state.add("Game", Game);
-      this.game.state.add("GameOver", GameOver);
-      this.game.state.add("Options", Options);
   }
 
   addGameMusic() {

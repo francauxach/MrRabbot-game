@@ -6,15 +6,16 @@ export default class extends Phaser.State {
   init () {}
   preload () {
       this.game.load.spritesheet('player', './assets/images/player.png', 32, 32)
-      this.game.load.spritesheet('campFire', './assets/images/campFire.png', 64, 64)
+      // this.game.load.spritesheet('campFire', './assets/images/campFire.png', 64, 64)
       this.game.load.image('carrot', './assets/images/carrot.png')
   }
 
   create () {
     this.playerFired = false;
     this.timer = 0;
-    this.map = this.game.add.tilemap('tilemap');
-    this.map.addTilesetImage('tiles', 'tiles');
+    this.map = this.game.add.tilemap('tilemap2');
+
+    this.map.addTilesetImage('tiles2', 'tiles2');
 
     this.backgroundLayer = this.map.createLayer('Background');
     this.groundLayer = this.map.createLayer('Trees');
@@ -45,7 +46,7 @@ export default class extends Phaser.State {
     this.player.animations.add('up', [12, 13, 14, 15, 12], 10, false)
 
     this.createItems();
-    this.createCampFires();
+    // this.createCampFires();
     this.createHUD();
 
   }
@@ -54,9 +55,9 @@ export default class extends Phaser.State {
       this.livesSheets = this.game.add.group();
       this.hud = this.game.add.group();
       this.hud.enableBody = false;
-      this.livesText = this.add.text(550, 50, 'Rabbits:    x' + window.game.globalVariables.lives, { font: '40px Arial', fill: '#dddddd', align: 'center' })
-      this.livesSheets.create(700, 60, 'player');
-      this.scoreText = this.add.text(100, 50, 'Score: ' + window.game.globalVariables.score, { font: '40px Arial', fill: '#dddddd', align: 'center' })
+      this.livesText = this.add.text(650, 50, 'Rabbits:    x' + window.game.globalVariables.lives, { font: '45px Arial', fill: '#777777', align: 'center' })
+      this.livesSheets.create(820, 55, 'player');
+      this.scoreText = this.add.text(650, 150, 'Score: ' + window.game.globalVariables.score, { font: '45px Arial', fill: '#777777', align: 'center' })
       this.hud.add(this.livesText)
       this.hud.add(this.livesSheets)
       this.hud.add(this.scoreText)
@@ -67,22 +68,24 @@ export default class extends Phaser.State {
         //create items
         this.carrots = this.game.add.group();
         this.carrots.enableBody = true;
-        this.carrot1 = this.game.add.sprite(125, 630, 'carrot')
+        this.carrot1 = this.game.add.sprite(210, 30, 'carrot')
         this.carrots.add(this.carrot1)
-        this.carrot2 = this.game.add.sprite(325, 430, 'carrot')
+        this.carrot2 = this.game.add.sprite(35, 225, 'carrot')
         this.carrots.add(this.carrot2)
-        this.carrot3 = this.game.add.sprite(510, 530, 'carrot')
+        this.carrot3 = this.game.add.sprite(290, 225, 'carrot')
         this.carrots.add(this.carrot3)
-        this.carrot4 = this.game.add.sprite(510, 225, 'carrot')
+        this.carrot4 = this.game.add.sprite(470, 160, 'carrot')
         this.carrots.add(this.carrot4)
-        this.carrot5 = this.game.add.sprite(880, 325, 'carrot')
+        this.carrot5 = this.game.add.sprite(170, 350, 'carrot')
         this.carrots.add(this.carrot5)
-        this.carrot6 = this.game.add.sprite(710, 850, 'carrot')
+        this.carrot6 = this.game.add.sprite(95, 540, 'carrot')
         this.carrots.add(this.carrot6)
-        this.carrot7 = this.game.add.sprite(880, 525, 'carrot')
+        this.carrot7 = this.game.add.sprite(550, 480, 'carrot')
         this.carrots.add(this.carrot7)
-        this.carrot8 = this.game.add.sprite(325, 850, 'carrot')
+        this.carrot8 = this.game.add.sprite(450, 350, 'carrot')
         this.carrots.add(this.carrot8)
+        this.carrot9 = this.game.add.sprite(290, 480, 'carrot')
+        this.carrots.add(this.carrot9)
     }
 
     createCampFires() {
@@ -106,7 +109,7 @@ export default class extends Phaser.State {
     }
 
     spawnPlayer() {
-        this.player = this.game.add.sprite(125, 75, 'player')
+        this.player = this.game.add.sprite(400, 25, 'player')
     }
 
     collect(player, collectable) {
@@ -129,7 +132,7 @@ export default class extends Phaser.State {
       this.game.physics.arcade.collide(this.player, this.groundLayer)
       this.game.physics.arcade.overlap(this.player, this.carrots, this.collect, null, this);
       if(!this.playerFired) {
-          this.game.physics.arcade.overlap(this.player, this.campFires, this.firing, null, this);
+          // this.game.physics.arcade.overlap(this.player, this.campFires, this.firing, null, this);
       } else {
           this.timer++
           if (this.timer%50 == 0) {
@@ -137,7 +140,7 @@ export default class extends Phaser.State {
           }
       }
 
-      this.fireCampsAnimation()
+      // this.fireCampsAnimation()
 
       this.inputs()
   }

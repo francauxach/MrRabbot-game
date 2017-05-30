@@ -12,7 +12,7 @@ export default class extends Phaser.State {
         this.game.add.sprite(0, 0, 'gameover-bg');
         let gameOver = this;
         let titleStyle = { font: 'bold 60pt TheMinion', fill: '#FDFFB5', align: 'center'};
-        let text = this.game.add.text(game.world.centerX, 100, "Game Over", titleStyle);
+        let text = this.game.add.text(this.game.world.centerX, 200, "Game Over", titleStyle);
         text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
         text.anchor.set(0.5);
         this.addMenuOption('Play Again', function (e) {
@@ -28,7 +28,7 @@ export default class extends Phaser.State {
 
     addMenuOption(text, callback) {
         let optionStyle = { font: '30pt TheMinion', fill: 'white', align: 'left', stroke: 'rgba(0,0,0,0)', srokeThickness: 4};
-        let txt = this.game.add.text(game.world.centerX, (this.optionCount * 80) + 300, text, optionStyle);
+        let txt = this.game.add.text(this.game.world.centerX, (this.optionCount * 80) + 400, text, optionStyle);
         txt.anchor.setTo(0.5);
         txt.stroke = "rgba(0,0,0,0";
         txt.strokeThickness = 4;

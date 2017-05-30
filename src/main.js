@@ -5,6 +5,7 @@ import Phaser from 'phaser'
 import BootState from './states/Boot'
 import SplashState from './states/Splash'
 import GameState from './states/Game'
+import Level2State from './states/Level2'
 import GameMenuState from './states/GameMenu'
 import GameOverState from './states/GameOver'
 import OptionsState from './states/Options'
@@ -23,6 +24,7 @@ class Game extends Phaser.Game {
     this.state.add('Boot', BootState, false)
     this.state.add('Splash', SplashState, false)
     this.state.add('Game', GameState, false)
+    this.state.add('Level2', Level2State, false)
     this.state.add('GameMenu', GameMenuState, false)
     this.state.add('GameOver', GameOverState, false)
     this.state.add('Options', OptionsState, false)
@@ -32,3 +34,8 @@ class Game extends Phaser.Game {
 }
 
 window.game = new Game()
+
+window.game.globalVariables = {
+  lives: 3,
+  score: 0,
+}
