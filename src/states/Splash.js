@@ -31,6 +31,7 @@ export default class extends Phaser.State {
   create () {
       this.status.setText('Ready!');
       this.addGameMusic();
+      this.addGameSounds();
 
       let splash = this;
 
@@ -41,12 +42,17 @@ export default class extends Phaser.State {
 
   loadBgm() {
       this.game.load.audio('dangerous', './assets/bgm/Dangerous.mp3');
-      this.game.load.audio('exit', './assets/bgm/Exit the Premises.mp3');
+      this.game.load.audio('carrotEating', './assets/bgm/CarrotEating.mp3');
   }
 
   addGameMusic() {
       window.game.globalVariables.music = this.game.add.audio('dangerous');
       window.game.globalVariables.music.loop = true;
       window.game.globalVariables.music.play();
+  }
+
+  addGameSounds() {
+    window.game.globalVariables.carrotEatingSound = this.game.add.audio('carrotEating');
+    window.game.globalVariables.carrotEatingSound.loop = false;
   }
 }

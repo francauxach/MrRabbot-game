@@ -60,7 +60,7 @@ export default class extends Phaser.State {
   createLair() {
       this.lairs = this.game.add.group();
       this.lairs.enableBody = true
-      this.lair1 = this.game.add.sprite(515, 520, 'lair');
+      this.lair1 = this.game.add.sprite(515, 300, 'lair');
       this.lairs.add(this.lair1);
       this.lairs.forEach( (lair) => {
           lair.body.setSize(32, 32, 24, 12)
@@ -132,7 +132,7 @@ export default class extends Phaser.State {
     }
 
     collect(player, collectable) {
-
+        window.game.globalVariables.carrotEatingSound.play();
         collectable.destroy();
         this.carrotsCollected++;
         window.game.globalVariables.level1Completed = (this.carrotsCollected == 8)

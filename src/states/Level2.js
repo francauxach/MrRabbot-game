@@ -107,6 +107,7 @@ export default class extends Phaser.State {
     }
 
     collect(player, collectable) {
+        window.game.globalVariables.carrotEatingSound.play();
         collectable.destroy();
         this.carrotsCollected++;
         window.game.globalVariables.level2Completed = (this.carrotsCollected == 9)

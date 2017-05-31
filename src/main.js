@@ -37,6 +37,7 @@ window.game = new Game()
 
 window.game.globalVariables = {
   music: null,
+  carrotEatingSound: null,
   level1Completed: false,
   level2Completed: false,
   lives: 3,
