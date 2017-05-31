@@ -8,11 +8,13 @@ export default class extends Phaser.State {
       this.game.load.spritesheet('player', './assets/images/player.png', 32, 32)
       // this.game.load.spritesheet('campFire', './assets/images/campFire.png', 64, 64)
       this.game.load.image('carrot', './assets/images/carrot.png')
+      this.game.load.image('lair', './assets/images/lair.png')
   }
 
   create () {
-    this.playerFired = false;
-    this.timer = 0;
+    this.carrotsCollected = 0;
+    this.lives_tmp = window.game.globalVariables.lives
+    this.score_tmp = window.game.globalVariables.score
     this.map = this.game.add.tilemap('tilemap2');
 
     this.map.addTilesetImage('tiles2', 'tiles2');
@@ -45,19 +47,31 @@ export default class extends Phaser.State {
     this.player.animations.add('right', [8, 9, 10, 11, 8], 10, false)
     this.player.animations.add('up', [12, 13, 14, 15, 12], 10, false)
 
+    this.createLair();
     this.createItems();
-    // this.createCampFires();
     this.createHUD();
 
   }
+
+    createLair() {
+        this.lairs = this.game.add.group();
+        this.lairs.enableBody = true
+        this.lair1 = this.game.add.sprite(288, 540, 'lair');
+        this.lairs.add(this.lair1);
+        this.lairs.forEach( (lair) => {
+            lair.body.setSize(32, 32, 24, 12)
+            lair.visible = false;
+        })
+
+    }
 
     createHUD() {
       this.livesSheets = this.game.add.group();
       this.hud = this.game.add.group();
       this.hud.enableBody = false;
-      this.livesText = this.add.text(650, 50, 'Rabbits:    x' + window.game.globalVariables.lives, { font: '45px Arial', fill: '#777777', align: 'center' })
+      this.livesText = this.add.text(650, 50, 'Rabbits:    x' + this.lives_tmp, { font: '45px Arial', fill: '#777777', align: 'center' })
       this.livesSheets.create(820, 55, 'player');
-      this.scoreText = this.add.text(650, 150, 'Score: ' + window.game.globalVariables.score, { font: '45px Arial', fill: '#777777', align: 'center' })
+      this.scoreText = this.add.text(650, 150, 'Score: ' + this.score_tmp, { font: '45px Arial', fill: '#777777', align: 'center' })
       this.hud.add(this.livesText)
       this.hud.add(this.livesSheets)
       this.hud.add(this.scoreText)
@@ -88,68 +102,34 @@ export default class extends Phaser.State {
         this.carrots.add(this.carrot9)
     }
 
-    createCampFires() {
-      this.campFires = this.game.add.group();
-      this.campFires.enableBody = true;
-      this.campFire1 = this.game.add.sprite(495, 100, 'campFire')
-      this.campFires.add(this.campFire1)
-      this.campFire1.animations.add('fire', [0,1,2,3], 8, false)
-      this.campFire2 = this.game.add.sprite(495, 735, 'campFire')
-      this.campFires.add(this.campFire2)
-      this.campFire2.animations.add('fire', [0,1,2,3], 8, false)
-      this.campFire3 = this.game.add.sprite(835, 835, 'campFire')
-      this.campFires.add(this.campFire3)
-      this.campFire3.animations.add('fire', [0,1,2,3], 8, false)
-      this.campFire4 = this.game.add.sprite(680, 60, 'campFire')
-      this.campFires.add(this.campFire4)
-      this.campFire4.animations.add('fire', [0,1,2,3], 8, false)
-      this.campFires.forEach( (campFire) => {
-        campFire.body.setSize(32,48, 24, 12)
-      })
-    }
-
     spawnPlayer() {
         this.player = this.game.add.sprite(400, 25, 'player')
     }
 
     collect(player, collectable) {
         collectable.destroy();
-        window.game.globalVariables.score += 100;
-        this.scoreText.setText('Score: ' + window.game.globalVariables.score)
+        this.carrotsCollected++;
+        window.game.globalVariables.level2Completed = (this.carrotsCollected == 9)
+        this.score_tmp += 100;
+        this.scoreText.setText('Score: ' + this.score_tmp)
     }
 
-    firing(player, enemy) {
-        this.game.camera.shake(0.05, 200)
-        this.playerFired = true;
-        window.game.globalVariables.lives--;
-        this.livesText.setText('Rabbits:    x' + window.game.globalVariables.lives)
-        if (window.game.globalVariables.lives == 0) {
-            this.game.state.start("GameOver");
-        }
+    goToNextLevel(player, lair) {
+        this.state.start('GameOver')
     }
 
   update(){
       this.game.physics.arcade.collide(this.player, this.groundLayer)
       this.game.physics.arcade.overlap(this.player, this.carrots, this.collect, null, this);
-      if(!this.playerFired) {
-          // this.game.physics.arcade.overlap(this.player, this.campFires, this.firing, null, this);
-      } else {
-          this.timer++
-          if (this.timer%50 == 0) {
-              this.playerFired = false;
-          }
+
+      if (window.game.globalVariables.level2Completed) {
+          this.lairs.forEach( (lair) => {
+              lair.visible = true
+          })
+          this.game.physics.arcade.overlap(this.player, this.lairs, this.goToNextLevel, null, this);
       }
 
-      // this.fireCampsAnimation()
-
       this.inputs()
-  }
-
-  fireCampsAnimation () {
-      this.campFire1.animations.play('fire');
-      this.campFire2.animations.play('fire');
-      this.campFire3.animations.play('fire');
-      this.campFire4.animations.play('fire');
   }
 
     inputs () {

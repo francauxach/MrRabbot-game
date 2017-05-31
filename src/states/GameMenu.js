@@ -27,7 +27,7 @@ export default class extends Phaser.State {
         this.game.add.existing(this.titleText);
 
         this.addMenuOption('Start', function () {
-            this.state.start("Level2");
+            this.state.start("Game");
         });
         this.addMenuOption('Options', function () {
             this.state.start("Options");

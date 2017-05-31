@@ -36,6 +36,8 @@ class Game extends Phaser.Game {
 window.game = new Game()
 
 window.game.globalVariables = {
+  level1Completed: false,
+  level2Completed: false,
   lives: 3,
   score: 0,
 }
