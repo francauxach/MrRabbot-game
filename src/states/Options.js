@@ -4,7 +4,7 @@ import config from "../config";
 export default class extends Phaser.State {
     init () {
 
-        this.titleText = this.game.make.text(this.game.world.centerX, 100, "Mr. Rabbot Game", {
+        this.titleText = this.game.make.text(this.game.world.centerX, 200, "Mr. Rabbot Game", {
             font: 'bold 60pt TheMinion',
             fill: '#FDFFB5',
             align: 'center'
@@ -18,21 +18,17 @@ export default class extends Phaser.State {
     }
 
     create () {
-        let playSound = config.gameOptions.playSound,
-            playMusic = config.gameOptions.playMusic;
+        this.playSound_tmp = config.gameOptions.playSound;
+        this.playMusic_tmp = config.gameOptions.playMusic;
 
         let Options = this;
 
         this.game.add.sprite(0, 0, 'options-bg');
         this.game.add.existing(this.titleText);
-        this.addMenuOption(playMusic ? 'Mute Music' : 'Play Music', function (target) {
-            playMusic = !playMusic;
-            target.text = playMusic ? 'Mute Music' : 'Play Music';
-            config.musicPlayer.volume = playMusic ? 1 : 0;
-        });
-        this.addMenuOption(playSound ? 'Mute Sound' : 'Play Sound', function (target) {
-            playSound = !playSound;
-            target.text = playSound ? 'Mute Sound' : 'Play Sound';
+        this.addMenuOption(this.playMusic_tmp ? 'Mute Music' : 'Play Music', function (target) {
+            Options.playMusic_tmp = !Options.playMusic_tmp;
+            target.text = Options.playMusic_tmp ? 'Mute Music' : 'Play Music';
+            Options.playMusic_tmp ? window.game.globalVariables.music.play() : window.game.globalVariables.music.stop();
         });
         this.addMenuOption('<- Back', function () {
             Options.game.state.start("GameMenu");
@@ -43,18 +39,18 @@ export default class extends Phaser.State {
     }
 
     addMenuOption(text, callback) {
-        let optionStyle = { font: '30pt TheMinion', fill: 'white', align: 'left', stroke: 'rgba(0,0,0,0)', srokeThickness: 4};
-        let txt = this.game.add.text(this.game.world.centerX, (this.optionCount * 80) + 300, text, optionStyle);
+        let optionStyle = { font: '30pt TheMinion', fill: '3A4014', align: 'left', stroke: 'rgba(0,0,0,0)', srokeThickness: 4};
+        let txt = this.game.add.text(this.game.world.centerX, (this.optionCount * 80) + 270, text, optionStyle);
         txt.anchor.setTo(0.5);
         txt.stroke = "rgba(0,0,0,0";
         txt.strokeThickness = 4;
         let onOver = function (target) {
-            target.fill = "#FEFFD5";
-            target.stroke = "rgba(200,200,200,0.5)";
+            target.fill = "#3A4014";
+            target.stroke = "rgba(0,0,0,0)";
             txt.useHandCursor = true;
         };
         let onOut = function (target) {
-            target.fill = "white";
+            target.fill = "#3A4014";
             target.stroke = "rgba(0,0,0,0)";
             txt.useHandCursor = false;
         };

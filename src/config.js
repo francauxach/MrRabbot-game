@@ -5,8 +5,5 @@ export default {
   gameOptions: {
     playSound: true,
     playMusic: true
-  },
-  musicPlayer: {
-    volume: 1,
   }
 }
