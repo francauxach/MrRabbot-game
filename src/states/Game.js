@@ -9,6 +9,7 @@ export default class extends Phaser.State {
       this.game.load.spritesheet('campFire', './assets/images/campFire.png', 64, 64)
       this.game.load.image('carrot', './assets/images/carrot.png')
       this.game.load.image('lair', './assets/images/lair.png')
+      this.game.load.image('fireParticle', './assets/images/fireParticle.png')
 
   }
 
@@ -54,8 +55,17 @@ export default class extends Phaser.State {
     this.createLair();
     this.createCampFires();
     this.createHUD();
+    this.setParticles();
 
   }
+
+    setParticles() {
+        this.fireParticles = this.game.add.emitter(0, 0, 20);
+        this.fireParticles.makeParticles('fireParticle');
+        this.fireParticles.setYSpeed(-100, 100);
+        this.fireParticles.setXSpeed(-100, 100);
+        this.fireParticles.gravity = 0;
+    }
 
   createLair() {
       this.lairs = this.game.add.group();
@@ -141,7 +151,10 @@ export default class extends Phaser.State {
     }
 
     firing(player, enemy) {
-        this.game.camera.shake(0.05, 200)
+        this.game.camera.shake(0.05, 100)
+        this.fireParticles.x = this.player.x;
+        this.fireParticles.y = this.player.y+10;
+        this.fireParticles.start(true, 800, null, 15);
         this.playerFired = true;
         this.lives_tmp--;
         this.livesText.setText('Rabbits:    x' + this.lives_tmp)
