@@ -18,14 +18,13 @@ export default class extends Phaser.State {
   create () {
     this.firerate = 0;
     this.nextFire = 0;
+    this.carrotsCollected = 0;
     this.lives_tmp = window.game.globalVariables.lives
     this.score_tmp = window.game.globalVariables.score
     this.playerFired = false;
     this.timer = 0;
     this.map = this.game.add.tilemap('tilemap');
     this.map.addTilesetImage('tiles', 'tiles');
-
-    this.carrotsCollected = 0;
 
     this.backgroundLayer = this.map.createLayer('Background');
     this.groundLayer = this.map.createLayer('Trees');
