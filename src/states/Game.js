@@ -10,11 +10,14 @@ export default class extends Phaser.State {
       this.game.load.image('carrot', './assets/images/carrot.png')
       this.game.load.image('lair', './assets/images/lair.png')
       this.game.load.image('fireParticle', './assets/images/fireParticle.png')
+      this.game.load.spritesheet('fireBall', './assets/images/fireBall.png', 32, 32)
       window.game.globalVariables.music.play();
 
   }
 
   create () {
+    this.firerate = 0;
+    this.nextFire = 0;
     this.lives_tmp = window.game.globalVariables.lives
     this.score_tmp = window.game.globalVariables.score
     this.playerFired = false;
@@ -37,8 +40,8 @@ export default class extends Phaser.State {
 
     this.game.physics.arcade.enable(this.player)
     this.game.physics.arcade.enable(this.backgroundLayer)
-    this.game.camera.setSize(800,500)
-    this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON)
+    this.game.camera.setSize(950,368)
+    this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT)
 
     this.player.body.gravity.y = 0
     this.player.body.allowRotation = false;
@@ -55,10 +58,23 @@ export default class extends Phaser.State {
     this.createItems();
     this.createLair();
     this.createCampFires();
+    this.createFireballs();
     this.createHUD();
     this.setParticles();
 
+    this.game.time.events.repeat(Phaser.Timer.SECOND * 4, 500, this.fire, this);
+
   }
+
+    createFireballs() {
+        this.weapon = this.game.add.weapon(40, 'fireBall');
+
+        this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+
+        this.weapon.bulletSpeed = 400;
+
+        this.weapon.fireRate = 0;
+    }
 
     setParticles() {
         this.fireParticles = this.game.add.emitter(0, 0, 20);
@@ -79,6 +95,31 @@ export default class extends Phaser.State {
       })
 
   }
+
+    colliding() {
+        window.game.globalVariables.collisionSound.play();
+    }
+
+    fire() {
+        window.game.globalVariables.fireBallSound.play();
+        this.campFires.forEach( (campFire) => {
+            var left = new Phaser.Point(campFire.x + 32, campFire.y + 32);
+            this.weapon.fireAngle = 0;
+            this.weapon.fire(left);
+
+            var right = new Phaser.Point(campFire.x + 32, campFire.y + 32);
+            this.weapon.fireAngle = 180;
+            this.weapon.fire(right);
+
+            var up = new Phaser.Point(campFire.x + 32, campFire.y + 32);
+            this.weapon.fireAngle = -90;
+            this.weapon.fire(up);
+
+            var down = new Phaser.Point(campFire.x + 32, campFire.y + 32);
+            this.weapon.fireAngle = 90;
+            this.weapon.fire(down);
+        })
+    }
 
     createHUD() {
       this.livesSheets = this.game.add.group();
@@ -155,6 +196,7 @@ export default class extends Phaser.State {
         this.game.camera.shake(0.05, 100)
         this.fireParticles.x = this.player.x;
         this.fireParticles.y = this.player.y+10;
+        window.game.globalVariables.hurtSound.play()
         this.fireParticles.start(true, 800, null, 15);
         this.playerFired = true;
         this.lives_tmp--;
@@ -171,10 +213,11 @@ export default class extends Phaser.State {
     }
 
   update(){
-      this.game.physics.arcade.collide(this.player, this.groundLayer)
+      this.game.physics.arcade.collide(this.player, this.groundLayer, this.colliding, null, this)
       this.game.physics.arcade.overlap(this.player, this.carrots, this.collect, null, this);
       if(!this.playerFired) {
           this.game.physics.arcade.overlap(this.player, this.campFires, this.firing, null, this);
+          this.game.physics.arcade.overlap(this.player, this.weapon.bullets, this.firing, null, this);
       } else {
           this.timer++
           if (this.timer%50 == 0) {

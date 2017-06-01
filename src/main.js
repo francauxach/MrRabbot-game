@@ -8,6 +8,7 @@ import GameState from './states/Game'
 import Level2State from './states/Level2'
 import GameMenuState from './states/GameMenu'
 import GameOverState from './states/GameOver'
+import GameCompletedState from './states/GameCompleted'
 import OptionsState from './states/Options'
 
 import config from './config'
@@ -27,6 +28,7 @@ class Game extends Phaser.Game {
     this.state.add('Level2', Level2State, false)
     this.state.add('GameMenu', GameMenuState, false)
     this.state.add('GameOver', GameOverState, false)
+    this.state.add('GameCompleted', GameCompletedState, false)
     this.state.add('Options', OptionsState, false)
 
     this.state.start('Boot')
@@ -38,6 +40,9 @@ window.game = new Game()
 window.game.globalVariables = {
   music: null,
   carrotEatingSound: null,
+  fireBallSound: null,
+  hurtSound: null,
+  collisionSound: null,
   level1Completed: false,
   level2Completed: false,
   lives: 3,

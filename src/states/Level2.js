@@ -32,8 +32,8 @@ export default class extends Phaser.State {
 
     this.game.physics.arcade.enable(this.player)
     this.game.physics.arcade.enable(this.backgroundLayer)
-    this.game.camera.setSize(800,500)
-    this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON)
+    this.game.camera.setSize(950,368)
+    this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT)
 
     this.player.body.gravity.y = 0
     this.player.body.allowRotation = false;
@@ -116,7 +116,9 @@ export default class extends Phaser.State {
     }
 
     goToNextLevel(player, lair) {
-        this.state.start('GameOver')
+        window.game.globalVariables.lives = this.lives_tmp;
+        window.game.globalVariables.score = this.score_tmp;
+        this.state.start('GameCompleted')
     }
 
   update(){

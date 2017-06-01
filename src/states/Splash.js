@@ -43,6 +43,9 @@ export default class extends Phaser.State {
   loadBgm() {
       this.game.load.audio('dangerous', './assets/bgm/Dangerous.mp3');
       this.game.load.audio('carrotEating', './assets/bgm/CarrotEating.mp3');
+      this.game.load.audio('fireBallSound', './assets/bgm/NFF-fireball.wav');
+      this.game.load.audio('hurtSound', './assets/bgm/NFF-kid-hurt.wav');
+      this.game.load.audio('collisionSound', './assets/bgm/NFF-spit.wav');
   }
 
   addGameMusic() {
@@ -53,5 +56,11 @@ export default class extends Phaser.State {
   addGameSounds() {
     window.game.globalVariables.carrotEatingSound = this.game.add.audio('carrotEating');
     window.game.globalVariables.carrotEatingSound.loop = false;
+    window.game.globalVariables.fireBallSound = this.game.add.audio('fireBallSound');
+    window.game.globalVariables.fireBallSound.loop = false;
+    window.game.globalVariables.hurtSound = this.game.add.audio('hurtSound');
+    window.game.globalVariables.hurtSound.loop = false;
+    window.game.globalVariables.collisionSound = this.game.add.audio('collisionSound');
+    window.game.globalVariables.collisionSound.loop = false;
   }
 }
