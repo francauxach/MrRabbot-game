@@ -48,7 +48,6 @@ export default class extends Phaser.State {
   addGameMusic() {
       window.game.globalVariables.music = this.game.add.audio('dangerous');
       window.game.globalVariables.music.loop = true;
-      window.game.globalVariables.music.play();
   }
 
   addGameSounds() {

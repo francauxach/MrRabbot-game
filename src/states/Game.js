@@ -10,6 +10,7 @@ export default class extends Phaser.State {
       this.game.load.image('carrot', './assets/images/carrot.png')
       this.game.load.image('lair', './assets/images/lair.png')
       this.game.load.image('fireParticle', './assets/images/fireParticle.png')
+      window.game.globalVariables.music.play();
 
   }
 
@@ -158,7 +159,7 @@ export default class extends Phaser.State {
         this.playerFired = true;
         this.lives_tmp--;
         this.livesText.setText('Rabbits:    x' + this.lives_tmp)
-        if (this.lives_tmp == 0) {
+        if (this.lives_tmp < 0) {
             this.game.state.start("GameOver");
         }
     }
