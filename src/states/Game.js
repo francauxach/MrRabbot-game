@@ -10,6 +10,10 @@ export default class extends Phaser.State {
       this.game.load.image('carrot', './assets/images/carrot.png')
       this.game.load.image('lair', './assets/images/lair.png')
       this.game.load.image('leaf1', './assets/images/leaf1.png');
+      this.game.load.image('left', './assets/images/left.png');
+      this.game.load.image('right', './assets/images/right.png');
+      this.game.load.image('up', './assets/images/up.png');
+      this.game.load.image('down', './assets/images/down.png');
       this.game.load.image('fireParticle', './assets/images/fireParticle.png')
       this.game.load.spritesheet('fireBall', './assets/images/fireBall.png', 32, 32)
       window.game.globalVariables.music.play();
@@ -65,6 +69,9 @@ export default class extends Phaser.State {
     this.setParticles();
 
     this.game.time.events.repeat(Phaser.Timer.SECOND * 4, 500, this.fire, this);
+
+    if (!this.game.device.desktop)
+      this.addMobileInputs()
 
   }
 
@@ -256,6 +263,46 @@ export default class extends Phaser.State {
       this.inputs()
   }
 
+    addMobileInputs() {
+
+        this.moveLeft = false;
+        this.moveRight = false;
+        this.moveUp == false;
+        this.moveDown == false;
+
+        this.leftButton = this.game.add.sprite(10, 130, 'left');
+        this.leftButton.inputEnabled = true;
+        this.leftButton.events.onInputOver.add(function(){this.moveLeft=true;}, this);
+        this.leftButton.events.onInputOut.add(function(){this.moveLeft=false;}, this);
+        this.leftButton.events.onInputDown.add(function(){this.moveLeft=true;}, this);
+        this.leftButton.events.onInputUp.add(function(){this.moveLeft=false;}, this);
+        this.leftButton.alpha = 0.5;
+
+        this.rightButton = this.game.add.sprite(110, 130, 'right');
+        this.rightButton.inputEnabled = true;
+        this.rightButton.events.onInputOver.add(function(){this.moveRight=true;}, this);
+        this.rightButton.events.onInputOut.add(function(){this.moveRight=false;}, this);
+        this.rightButton.events.onInputDown.add(function(){this.moveRight=true;}, this);
+        this.rightButton.events.onInputUp.add(function(){this.moveRight=false;}, this);
+        this.rightButton.alpha = 0.5;
+
+        this.upButton = this.game.add.sprite(60, 80, 'up');
+        this.upButton.inputEnabled = true;
+        this.upButton.events.onInputOver.add(function(){this.moveUp=true;}, this);
+        this.upButton.events.onInputOut.add(function(){this.moveUp=false;}, this);
+        this.upButton.events.onInputDown.add(function(){this.moveUp=true;}, this);
+        this.upButton.events.onInputUp.add(function(){this.moveUp=false;}, this);
+        this.upButton.alpha = 0.5;
+
+        this.downButton = this.game.add.sprite(60, 180, 'down');
+        this.downButton.inputEnabled = true;
+        this.downButton.events.onInputOver.add(function(){this.moveDown=true;}, this);
+        this.downButton.events.onInputOut.add(function(){this.moveDown=false;}, this);
+        this.downButton.events.onInputDown.add(function(){this.moveDown=true;}, this);
+        this.downButton.events.onInputUp.add(function(){this.moveDown=false;}, this);
+        this.downButton.alpha = 0.5;
+    }
+
   fireCampsAnimation () {
       this.campFire1.animations.play('fire');
       this.campFire2.animations.play('fire');
@@ -264,26 +311,26 @@ export default class extends Phaser.State {
   }
 
     inputs () {
-        if(this.cursor.down.isDown) {
+        if(this.cursor.down.isDown || this.moveDown) {
             this.player.animations.play('down')
             this.player.body.velocity.y = +220
         } else {
             this.player.body.velocity.y = 0
         }
 
-        if (this.cursor.left.isDown) {
+        if (this.cursor.left.isDown || this.moveLeft) {
             this.player.animations.play('left')
             this.player.body.velocity.x = -220
         } else {
             this.player.body.velocity.x = 0
         }
 
-        if (this.cursor.right.isDown) {
+        if (this.cursor.right.isDown || this.moveRight) {
             this.player.animations.play('right')
             this.player.body.velocity.x = +220
         }
 
-        if(this.cursor.up.isDown) {
+        if(this.cursor.up.isDown || this.moveUp) {
             this.player.animations.play('up')
             this.player.body.velocity.y = -220
         }
