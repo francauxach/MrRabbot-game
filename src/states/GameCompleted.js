@@ -9,6 +9,8 @@ export default class extends Phaser.State {
     }
 
     create () {
+        window.game.globalVariables.music.stop();
+        window.game.globalVariables.wellDoneSound.play();
         this.game.add.sprite(0, 0, 'gameover-bg');
         let gameOver = this;
         let titleStyle = { font: 'bold 60pt TheMinion', fill: '#FDFFB5', align: 'center'};
@@ -26,9 +28,11 @@ export default class extends Phaser.State {
         window.game.globalVariables.lives = 3;
         window.game.globalVariables.score = 0;
         this.addMenuOption('Play Again', function (e) {
+            window.game.globalVariables.wellDoneSound.stop();
             gameOver.game.state.start("Game");
         });
         this.addMenuOption('Main Menu', function (e) {
+            window.game.globalVariables.wellDoneSound.stop();
             gameOver.game.state.start("GameMenu");
         })
     }

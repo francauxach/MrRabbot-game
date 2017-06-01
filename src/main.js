@@ -39,6 +39,7 @@ window.game = new Game()
 
 window.game.globalVariables = {
   music: null,
+  wellDoneSound: null,
   carrotEatingSound: null,
   fireBallSound: null,
   hurtSound: null,

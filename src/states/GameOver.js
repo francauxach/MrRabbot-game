@@ -15,6 +15,8 @@ export default class extends Phaser.State {
         let text = this.game.add.text(this.game.world.centerX, 200, "Game Over", titleStyle);
         text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
         text.anchor.set(0.5);
+        window.game.globalVariables.lives = 3;
+        window.game.globalVariables.score = 0;
         this.addMenuOption('Play Again', function (e) {
             gameOver.game.state.start("Game");
         });

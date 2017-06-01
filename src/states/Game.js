@@ -9,6 +9,7 @@ export default class extends Phaser.State {
       this.game.load.spritesheet('campFire', './assets/images/campFire.png', 64, 64)
       this.game.load.image('carrot', './assets/images/carrot.png')
       this.game.load.image('lair', './assets/images/lair.png')
+      this.game.load.image('leaf1', './assets/images/leaf1.png');
       this.game.load.image('fireParticle', './assets/images/fireParticle.png')
       this.game.load.spritesheet('fireBall', './assets/images/fireBall.png', 32, 32)
       window.game.globalVariables.music.play();
@@ -34,6 +35,8 @@ export default class extends Phaser.State {
 
     //Change the world size to match the size of this layer
     // this.backgroundLayer.resizeWorld();
+
+      this.makeEmitter();
 
     this.spawnPlayer();
 
@@ -62,6 +65,23 @@ export default class extends Phaser.State {
     this.setParticles();
 
     this.game.time.events.repeat(Phaser.Timer.SECOND * 4, 500, this.fire, this);
+
+  }
+
+  makeEmitter() {
+      this.emitter = this.game.add.emitter(this.game.world.centerX, 0, 100);
+
+      this.emitter.makeParticles('leaf1');
+
+      this.emitter.minParticleSpeed.setTo(-300, 30);
+      this.emitter.maxParticleSpeed.setTo(300, 100);
+      this.emitter.minParticleScale = 0.1;
+      this.emitter.maxParticleScale = 0.5;
+      this.emitter.gravity = 250;
+
+      //  This will emit a quantity of 5 particles every 500ms. Each particle will live for 2000ms.
+      //  The -1 means "run forever"
+      this.emitter.flow(2000, 500, 5, 100);
 
   }
 

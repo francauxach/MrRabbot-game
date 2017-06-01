@@ -43,6 +43,7 @@ export default class extends Phaser.State {
   loadBgm() {
       this.game.load.audio('dangerous', './assets/bgm/Dangerous.mp3');
       this.game.load.audio('carrotEating', './assets/bgm/CarrotEating.mp3');
+      this.game.load.audio('wellDone', './assets/bgm/WellDone.mp3');
       this.game.load.audio('fireBallSound', './assets/bgm/NFF-fireball.wav');
       this.game.load.audio('hurtSound', './assets/bgm/NFF-kid-hurt.wav');
       this.game.load.audio('collisionSound', './assets/bgm/NFF-spit.wav');
@@ -62,5 +63,7 @@ export default class extends Phaser.State {
     window.game.globalVariables.hurtSound.loop = false;
     window.game.globalVariables.collisionSound = this.game.add.audio('collisionSound');
     window.game.globalVariables.collisionSound.loop = false;
+    window.game.globalVariables.wellDoneSound = this.game.add.audio('wellDoneSound');
+    window.game.globalVariables.wellDoneSound.loop = true;
   }
 }
