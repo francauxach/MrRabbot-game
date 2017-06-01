@@ -86,9 +86,8 @@ export default class extends Phaser.State {
       this.emitter.maxParticleScale = 0.5;
       this.emitter.gravity = 250;
 
-      //  This will emit a quantity of 5 particles every 500ms. Each particle will live for 2000ms.
-      //  The -1 means "run forever"
-      this.emitter.flow(2000, 500, 5, 100);
+
+      this.emitter.flow(1500, 500, 5, 50);
 
   }
 
@@ -219,7 +218,9 @@ export default class extends Phaser.State {
     }
 
     firing(player, enemy) {
-        this.game.camera.shake(0.05, 100)
+        if (!this.game.device.desktop) {
+            this.game.camera.shake(0.05, 100)
+        }
         this.fireParticles.x = this.player.x;
         this.fireParticles.y = this.player.y+10;
         window.game.globalVariables.hurtSound.play()
@@ -265,42 +266,51 @@ export default class extends Phaser.State {
 
     addMobileInputs() {
 
+        this.mobileInputs = this.game.add.group();
+
         this.moveLeft = false;
         this.moveRight = false;
         this.moveUp == false;
         this.moveDown == false;
 
-        this.leftButton = this.game.add.sprite(10, 130, 'left');
+        this.leftButton = this.game.add.sprite(10, 530, 'left');
         this.leftButton.inputEnabled = true;
         this.leftButton.events.onInputOver.add(function(){this.moveLeft=true;}, this);
         this.leftButton.events.onInputOut.add(function(){this.moveLeft=false;}, this);
         this.leftButton.events.onInputDown.add(function(){this.moveLeft=true;}, this);
         this.leftButton.events.onInputUp.add(function(){this.moveLeft=false;}, this);
         this.leftButton.alpha = 0.5;
+        this.mobileInputs.add(this.leftButton)
 
-        this.rightButton = this.game.add.sprite(110, 130, 'right');
+        this.rightButton = this.game.add.sprite(110, 530, 'right');
         this.rightButton.inputEnabled = true;
         this.rightButton.events.onInputOver.add(function(){this.moveRight=true;}, this);
         this.rightButton.events.onInputOut.add(function(){this.moveRight=false;}, this);
         this.rightButton.events.onInputDown.add(function(){this.moveRight=true;}, this);
         this.rightButton.events.onInputUp.add(function(){this.moveRight=false;}, this);
         this.rightButton.alpha = 0.5;
+        this.mobileInputs.add(this.rightButton)
 
-        this.upButton = this.game.add.sprite(60, 80, 'up');
+        this.upButton = this.game.add.sprite(60, 480, 'up');
         this.upButton.inputEnabled = true;
         this.upButton.events.onInputOver.add(function(){this.moveUp=true;}, this);
         this.upButton.events.onInputOut.add(function(){this.moveUp=false;}, this);
         this.upButton.events.onInputDown.add(function(){this.moveUp=true;}, this);
         this.upButton.events.onInputUp.add(function(){this.moveUp=false;}, this);
         this.upButton.alpha = 0.5;
+        this.mobileInputs.add(this.upButton)
 
-        this.downButton = this.game.add.sprite(60, 180, 'down');
+        this.downButton = this.game.add.sprite(60, 580, 'down');
         this.downButton.inputEnabled = true;
         this.downButton.events.onInputOver.add(function(){this.moveDown=true;}, this);
         this.downButton.events.onInputOut.add(function(){this.moveDown=false;}, this);
         this.downButton.events.onInputDown.add(function(){this.moveDown=true;}, this);
         this.downButton.events.onInputUp.add(function(){this.moveDown=false;}, this);
         this.downButton.alpha = 0.5;
+        this.mobileInputs.add(this.downButton)
+
+        this.mobileInputs.fixedToCamera = true;
+
     }
 
   fireCampsAnimation () {
