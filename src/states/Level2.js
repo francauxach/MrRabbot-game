@@ -60,6 +60,10 @@ export default class extends Phaser.State {
     this.createHUD();
     this.setParticles();
 
+    if (!this.game.device.desktop) {
+      this.addMobileInputs()
+    }
+
     this.game.time.events.repeat(Phaser.Timer.SECOND * 4, 500, this.fire, this);
 
   }
@@ -129,6 +133,55 @@ export default class extends Phaser.State {
             lair.body.setSize(32, 32, 24, 12)
             lair.visible = false;
         })
+
+    }
+
+    addMobileInputs() {
+
+        this.mobileInputs = this.game.add.group();
+
+        this.moveLeft = false;
+        this.moveRight = false;
+        this.moveUp = false;
+        this.moveDown = false;
+
+        this.leftButton = this.game.add.sprite(10, 530, 'left');
+        this.leftButton.inputEnabled = true;
+        this.leftButton.events.onInputOver.add(function(){this.moveLeft=true;}, this);
+        this.leftButton.events.onInputOut.add(function(){this.moveLeft=false;}, this);
+        this.leftButton.events.onInputDown.add(function(){this.moveLeft=true;}, this);
+        this.leftButton.events.onInputUp.add(function(){this.moveLeft=false;}, this);
+        this.leftButton.alpha = 0.5;
+        this.mobileInputs.add(this.leftButton)
+
+        this.rightButton = this.game.add.sprite(110, 530, 'right');
+        this.rightButton.inputEnabled = true;
+        this.rightButton.events.onInputOver.add(function(){this.moveRight=true;}, this);
+        this.rightButton.events.onInputOut.add(function(){this.moveRight=false;}, this);
+        this.rightButton.events.onInputDown.add(function(){this.moveRight=true;}, this);
+        this.rightButton.events.onInputUp.add(function(){this.moveRight=false;}, this);
+        this.rightButton.alpha = 0.5;
+        this.mobileInputs.add(this.rightButton)
+
+        this.upButton = this.game.add.sprite(60, 480, 'up');
+        this.upButton.inputEnabled = true;
+        this.upButton.events.onInputOver.add(function(){this.moveUp=true;}, this);
+        this.upButton.events.onInputOut.add(function(){this.moveUp=false;}, this);
+        this.upButton.events.onInputDown.add(function(){this.moveUp=true;}, this);
+        this.upButton.events.onInputUp.add(function(){this.moveUp=false;}, this);
+        this.upButton.alpha = 0.5;
+        this.mobileInputs.add(this.upButton)
+
+        this.downButton = this.game.add.sprite(60, 580, 'down');
+        this.downButton.inputEnabled = true;
+        this.downButton.events.onInputOver.add(function(){this.moveDown=true;}, this);
+        this.downButton.events.onInputOut.add(function(){this.moveDown=false;}, this);
+        this.downButton.events.onInputDown.add(function(){this.moveDown=true;}, this);
+        this.downButton.events.onInputUp.add(function(){this.moveDown=false;}, this);
+        this.downButton.alpha = 0.5;
+        this.mobileInputs.add(this.downButton)
+
+        this.mobileInputs.fixedToCamera = true;
 
     }
 
@@ -234,26 +287,26 @@ export default class extends Phaser.State {
   }
 
     inputs () {
-        if(this.cursor.down.isDown) {
+        if(this.cursor.down.isDown || (this.moveDown && !this.moveUp && !this.moveLeft && !this.moveRight)) {
             this.player.animations.play('down')
             this.player.body.velocity.y = +220
         } else {
             this.player.body.velocity.y = 0
         }
 
-        if (this.cursor.left.isDown) {
+        if (this.cursor.left.isDown || this.moveLeft) {
             this.player.animations.play('left')
             this.player.body.velocity.x = -220
         } else {
             this.player.body.velocity.x = 0
         }
 
-        if (this.cursor.right.isDown) {
+        if (this.cursor.right.isDown || this.moveRight) {
             this.player.animations.play('right')
             this.player.body.velocity.x = +220
         }
 
-        if(this.cursor.up.isDown) {
+        if(this.cursor.up.isDown || this.moveUp) {
             this.player.animations.play('up')
             this.player.body.velocity.y = -220
         }

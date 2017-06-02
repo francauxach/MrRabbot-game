@@ -70,8 +70,9 @@ export default class extends Phaser.State {
 
     this.game.time.events.repeat(Phaser.Timer.SECOND * 4, 500, this.fire, this);
 
-    if (!this.game.device.desktop)
-      this.addMobileInputs()
+    if (!this.game.device.desktop) {
+        this.addMobileInputs()
+    }
 
   }
 
@@ -271,8 +272,8 @@ export default class extends Phaser.State {
 
         this.moveLeft = false;
         this.moveRight = false;
-        this.moveUp == false;
-        this.moveDown == false;
+        this.moveUp = false;
+        this.moveDown = false;
 
         this.leftButton = this.game.add.sprite(10, 530, 'left');
         this.leftButton.inputEnabled = true;
@@ -322,26 +323,26 @@ export default class extends Phaser.State {
   }
 
     inputs () {
-        if(this.cursor.down.isDown || this.moveDown) {
+        if(this.cursor.down.isDown || (this.moveDown && !this.moveUp && !this.moveLeft && !this.moveRight)) {
             this.player.animations.play('down')
             this.player.body.velocity.y = +220
         } else {
             this.player.body.velocity.y = 0
         }
 
-        if (this.cursor.left.isDown || this.moveLeft) {
+        if (this.cursor.left.isDown || (!this.moveDown && !this.moveUp && this.moveLeft && !this.moveRight)) {
             this.player.animations.play('left')
             this.player.body.velocity.x = -220
         } else {
             this.player.body.velocity.x = 0
         }
 
-        if (this.cursor.right.isDown || this.moveRight) {
+        if (this.cursor.right.isDown || (!this.moveDown && !this.moveUp && !this.moveLeft && this.moveRight)) {
             this.player.animations.play('right')
             this.player.body.velocity.x = +220
         }
 
-        if(this.cursor.up.isDown || this.moveUp) {
+        if(this.cursor.up.isDown || (!this.moveDown && this.moveUp && !this.moveLeft && !this.moveRight)) {
             this.player.animations.play('up')
             this.player.body.velocity.y = -220
         }
