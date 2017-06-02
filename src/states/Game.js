@@ -203,6 +203,7 @@ export default class extends Phaser.State {
 
     spawnPlayer() {
       window.game.globalVariables.level1Completed = false
+      window.game.globalVariables.level2Completed = false
       this.lives_tmp = window.game.globalVariables.lives
       this.score_tmp = window.game.globalVariables.score
       this.player = this.game.add.sprite(125, 75, 'player')
