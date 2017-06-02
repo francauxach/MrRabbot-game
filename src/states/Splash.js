@@ -43,7 +43,7 @@ export default class extends Phaser.State {
   loadBgm() {
       this.game.load.audio('dangerous', './assets/bgm/Dangerous.mp3');
       this.game.load.audio('carrotEating', './assets/bgm/CarrotEating.mp3');
-      this.game.load.audio('wellDone', './assets/bgm/WellDone.mp3');
+      this.game.load.audio('wellDoneSound', './assets/bgm/WellDone.mp3');
       this.game.load.audio('fireBallSound', './assets/bgm/NFF-fireball.wav');
       this.game.load.audio('hurtSound', './assets/bgm/NFF-kid-hurt.wav');
       this.game.load.audio('collisionSound', './assets/bgm/NFF-spit.wav');
